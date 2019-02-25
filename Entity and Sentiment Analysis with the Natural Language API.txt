@@ -1,0 +1,269 @@
+gcloud auth list
+Credentialed accounts:
+ - <myaccount>@<mydomain>.com (active)
+
+ gcloud config list project
+ [core]
+project = <project_ID>
+
+export API_KEY=<YOUR_API_KEY>   //replace <your_api_key> with the key you just copied
+
+touch request.json
+vim request.json
+
+{
+  "document":{
+    "type":"PLAIN_TEXT",
+    "content":"Joanne Rowling, who writes under the pen names J. K. Rowling and Robert Galbraith, is a British novelist and screenwriter who wrote the Harry Potter fantasy series."
+  },
+  "encodingType":"UTF8"
+}
+
+curl "https://language.googleapis.com/v1/documents:analyzeEntities?key=${API_KEY}" \
+  -s -X POST -H "Content-Type: application/json" --data-binary @request.json          //Call the Natural Language API
+
+
+{
+  "entities": [
+     {
+      "name": "Robert Galbraith",
+      "type": "PERSON",
+      "metadata": {
+        "mid": "/m/042xh",
+        "wikipedia_url": "https://en.wikipedia.org/wiki/J._K._Rowling"
+      },
+      "salience": 0.7980405,
+      "mentions": [
+        {
+          "text": {
+            "content": "Joanne Rowling",
+            "beginOffset": 0
+          },
+          "type": "PROPER"
+        },
+        {
+          "text": {
+            "content": "Rowling",
+            "beginOffset": 53
+          },
+          "type": "PROPER"
+        },
+        {
+          "text": {
+            "content": "novelist",
+            "beginOffset": 96
+          },
+          "type": "COMMON"
+        },
+        {
+          "text": {
+            "content": "Robert Galbraith",
+            "beginOffset": 65
+          },
+          "type": "PROPER"
+        }
+      ]
+    }
+
+  ]
+}
+
+
+ {
+  "document":{
+    "type":"PLAIN_TEXT",
+    "content":"Harry Potter is the best book. I think everyone should read it."
+  },
+  "encodingType": "UTF8"
+}
+
+curl "https://language.googleapis.com/v1/documents:analyzeSentiment?key=${API_KEY}" \
+  -s -X POST -H "Content-Type: application/json" --data-binary @request.json
+
+{
+  "documentSentiment": {
+    "magnitude": 0.8,
+    "score": 0.4
+  },
+  "language": "en",
+  "sentences": [
+    {
+      "text": {
+        "content": "Harry Potter is the best book.",
+        "beginOffset": 0
+      },
+      "sentiment": {
+        "magnitude": 0.7,
+        "score": 0.7
+      }
+    },
+    {
+      "text": {
+        "content": "I think everyone should read it.",
+        "beginOffset": 31
+      },
+      "sentiment": {
+        "magnitude": 0.1,
+        "score": 0.1
+      }
+    }
+  ]
+}
+
+
+ {
+  "document":{
+    "type":"PLAIN_TEXT",
+    "content":"I liked the sushi but the service was terrible."
+  },
+  "encodingType": "UTF8"
+}
+
+curl "https://language.googleapis.com/v1/documents:analyzeEntitySentiment?key=${API_KEY}" \
+  -s -X POST -H "Content-Type: application/json" --data-binary @request.json
+
+
+{
+  "entities": [
+    {
+      "name": "sushi",
+      "type": "CONSUMER_GOOD",
+      "metadata": {},
+      "salience": 0.52716845,
+      "mentions": [
+        {
+          "text": {
+            "content": "sushi",
+            "beginOffset": 12
+          },
+          "type": "COMMON",
+          "sentiment": {
+            "magnitude": 0.9,
+            "score": 0.9
+          }
+        }
+      ],
+      "sentiment": {
+        "magnitude": 0.9,
+        "score": 0.9
+      }
+    },
+    {
+      "name": "service",
+      "type": "OTHER",
+      "metadata": {},
+      "salience": 0.47283158,
+      "mentions": [
+        {
+          "text": {
+            "content": "service",
+            "beginOffset": 26
+          },
+          "type": "COMMON",
+          "sentiment": {
+            "magnitude": 0.9,
+            "score": -0.9
+          }
+        }
+      ],
+      "sentiment": {
+        "magnitude": 0.9,
+        "score": -0.9
+      }
+    }
+  ],
+  "language": "en"
+}
+
+{
+  "document":{
+    "type":"PLAIN_TEXT",
+    "content": "Joanne Rowling is a British novelist, screenwriter and film producer."
+  },
+  "encodingType": "UTF8"
+}
+
+curl "https://language.googleapis.com/v1/documents:analyzeSyntax?key=${API_KEY}" \
+  -s -X POST -H "Content-Type: application/json" --data-binary @request.json
+
+
+{
+      "text": {
+        "content": "is",
+        "beginOffset": 15
+      },
+      "partOfSpeech": {
+        "tag": "VERB",
+        "aspect": "ASPECT_UNKNOWN",
+        "case": "CASE_UNKNOWN",
+        "form": "FORM_UNKNOWN",
+        "gender": "GENDER_UNKNOWN",
+        "mood": "INDICATIVE",
+        "number": "SINGULAR",
+        "person": "THIRD",
+        "proper": "PROPER_UNKNOWN",
+        "reciprocity": "RECIPROCITY_UNKNOWN",
+        "tense": "PRESENT",
+        "voice": "VOICE_UNKNOWN"
+      },
+      "dependencyEdge": {
+        "headTokenIndex": 2,
+        "label": "ROOT"
+      },
+      "lemma": "be"
+    }
+    
+
+
+{
+  "document":{
+    "type":"PLAIN_TEXT",
+    "content":"日本のグーグルのオフィスは、東京の六本木ヒルズにあります"
+  }
+}
+
+
+curl "https://language.googleapis.com/v1/documents:analyzeEntities?key=${API_KEY}" \
+  -s -X POST -H "Content-Type: application/json" --data-binary @request.json
+
+{
+  "entities": [
+    {
+      "name": "日本",
+      "type": "LOCATION",
+      "metadata": {
+        "mid": "/m/03_3d",
+        "wikipedia_url": "https://en.wikipedia.org/wiki/Japan"
+      },
+      "salience": 0.23854347,
+      "mentions": [
+        {
+          "text": {
+            "content": "日本",
+            "beginOffset": 0
+          },
+          "type": "PROPER"
+        }
+      ]
+    },
+    {
+      "name": "グーグル",
+      "type": "ORGANIZATION",
+      "metadata": {
+        "mid": "/m/045c7b",
+        "wikipedia_url": "https://en.wikipedia.org/wiki/Google"
+      },
+      "salience": 0.21155767,
+      "mentions": [
+        {
+          "text": {
+            "content": "グーグル",
+            "beginOffset": 9
+          },
+          "type": "PROPER"
+        }
+      ]
+    }
+  ]
+  "language": "ja"
+}
